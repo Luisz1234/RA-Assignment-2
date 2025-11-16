@@ -86,24 +86,28 @@ void two_choice_strategy(vector<int>& bins) {
     }
 }
 
-// Picks three bins and places the ball in the one with the minimum load.
 void three_choice_strategy(vector<int>& bins) {
     uniform_int_distribution<int> dist(0, bins.size() - 1);
+    
     int idx1 = dist(rng);
     int idx2 = dist(rng);
     int idx3 = dist(rng);
 
-    int min_load = bins[idx1];
-    int chosen_idx = idx1;
+    int min_load = min({bins[idx1], bins[idx2], bins[idx3]});
 
-    if (bins[idx2] < min_load) {
-        min_load = bins[idx2];
-        chosen_idx = idx2;
+    vector<int> candidates;
+    if (bins[idx1] == min_load) {
+        candidates.push_back(idx1);
     }
-    if (bins[idx3] < min_load) {
-        chosen_idx = idx3;
+    if (bins[idx2] == min_load) {
+        candidates.push_back(idx2);
     }
-    // Note: A simple tie-break rule is to favor the first index found (idx1, then idx2, then idx3).
+    if (bins[idx3] == min_load) {
+        candidates.push_back(idx3);
+    }
+
+    uniform_int_distribution<int> tie_breaker_dist(0, candidates.size() - 1);
+    int chosen_idx = candidates[tie_breaker_dist(rng)];
     bins[chosen_idx]++;
 }
 
@@ -272,6 +276,7 @@ int main() {
     run_batched_experiment(m, T, m, "batched_b100.dat");
     run_batched_experiment(m, T, 2 * m, "batched_b200.dat");
     run_batched_experiment(m, T, 10 * m, "batched_b1000.dat");
+    run_batched_experiment(m, T, 70 * m, "batched_b7000.dat");
 
     run_full_stat_experiment(m, T, [](auto& b){ partial_info_strategy(b, 1); }, "partial_k1_stats.dat");
     run_full_stat_experiment(m, T, [](auto& b){ partial_info_strategy(b, 2); }, "partial_k2_stats.dat");
@@ -310,7 +315,8 @@ int main() {
                    "     'batched_b10.dat' using 1:2 with lines title 'Batched (b=10)', \\\n"
                    "     'batched_b100.dat' using 1:2 with lines title 'Batched (b=m=" + to_string(m) + ")', \\\n"
                    "     'batched_b200.dat' using 1:2 with lines title 'Batched (b=2m=" + to_string(2*m) + ")', \\\n"
-                   "     'batched_b1000.dat' using 1:2 with lines title 'Batched (b=10m=" + to_string(10*m) + ")'");
+                   "     'batched_b1000.dat' using 1:2 with lines title 'Batched (b=10m=" + to_string(10*m) + ")', \\\n"
+                   "     'batched_b7000.dat' using 1:2 with lines title 'Batched (b=70m=" + to_string(70*m) + ")'");
         gp.command("unset arrow 1");
         cout << "Generated plot_batched_strategies.png" << endl;
 
