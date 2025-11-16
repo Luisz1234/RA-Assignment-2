@@ -28,17 +28,17 @@ To compile and run the program, the following software must be installed and acc
 ## Instructions
 
 1.  **Compilation:**
-    Save the code as `balanced_allocation.cpp`. Navigate to the directory containing the file and compile it using a C++ compiler. The `-lm` flag is included to link the math library.
+    Save the code as `balanced_allocation.cpp`. Navigate to the directory containing the file and compile it using a C++ compiler.
 
     ```bash
-    g++ -std=c++11 -O2 balanced_allocation.cpp -o balanced_allocation -lm
+    g++ balancedalloc.cpp
     ```
 
 2.  **Execution:**
     Run the compiled executable from the command line. The program is non-interactive and has the simulation parameters (`m=100`, `T=20`) hardcoded.
 
     ```bash
-    ./balanced_allocation
+    ./a.out
     ```
 
     Upon execution, the program will first run all simulations, printing progress to the console. It will then automatically generate the data and plot files in the same directory. The entire process may take a few minutes to complete.
@@ -59,7 +59,7 @@ Running the program produces the following files in the current directory:
     *   `partial_k1_stats.dat`
     *   `partial_k2_stats.dat`
 
-*   **Plot Images (`.png`):** High-quality image files containing the final plots for the report.
+*   **Plot Images (`.png`):** Image files containing the final plots for the report.
     *   `plot_standard_strategies.png`
     *   `plot_variance.png`
     *   `plot_batched_strategies.png`
